@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER_SWEET_HAVEN_2000</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cute-pink': '#ffd1dc',
+                        'cute-pink-dark': '#ff85a2',
+                        'cute-blue': '#d0e8ff',
+                        'cute-blue-dark': '#70d6ff',
+                        'cute-lavender': '#e0c3fc',
+                        'cute-hotpink': '#ff69b4',
+                        'cute-yellow': '#fff176',
+                        'cute-mint': '#b5ffe1',
+                        'cute-dark': '#2a1a40',
+                        'cute-gray': '#f4effa',
+                    },
+                    fontFamily: {
+                        'pixel-title': ['"Press Start 2P"', 'monospace'],
+                        'pixel-body': ['"VT323"', 'monospace'],
+                        'tech': ['"Share Tech Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #fbebf2;
+            color: #2a1a40;
+            font-family: 'VT323', monospace;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 209, 220, 0.8) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(208, 232, 255, 0.8) 0%, transparent 40%),
+                linear-gradient(rgba(255, 133, 162, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(112, 214, 255, 0.15) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 20px 20px, 20px 20px;
+        }
+
+        /* Subtle Soft Scanlines */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            background: linear-gradient(
+                rgba(255, 255, 255, 0) 50%, 
+                rgba(255, 182, 193, 0.12) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 999;
+        }
+
+        /* Cute Y2K Pastel Window */
+        .pixel-window {
+            background: #ffffff;
+            border-top: 3px solid #ffffff;
+            border-left: 3px solid #ffffff;
+            border-right: 3px solid #ffb3c6;
+            border-bottom: 3px solid #ffb3c6;
+            box-shadow: 5px 5px 0px #ffc2d1, 10px 10px 0px #b9e1ff;
+        }
+
+        .pixel-window-header {
+            background: linear-gradient(90deg, #ff85a2, #b5b6ff);
+            color: white;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            text-shadow: 1px 1px 0px #2a1a40;
+        }
+
+        /* Tactile Pastel Pixel Button */
+        .pixel-button {
+            background: #f4effa;
+            border-top: 2px solid #ffffff;
+            border-left: 2px solid #ffffff;
+            border-right: 2px solid #ff85a2;
+            border-bottom: 2px solid #ff85a2;
+            color: #2a1a40;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            box-shadow: 2px 2px 0px #ffc2d1;
+        }
+
+        .pixel-button:hover {
+            background: #ffe4e8;
+            color: #ff1493;
+        }
+
+        .pixel-button:active {
+            border-top: 2px solid #ff85a2;
+            border-left: 2px solid #ff85a2;
+            border-right: 2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px;
+        }
+
+        /* Glowing Pastel Button */
+        .cute-neon-btn {
+            background: #ffffff;
+            color: #ff477e;
+            border: 2px solid #ff85a2;
+            box-shadow: 3px 3px 0px #ff85a2, 0 0 10px rgba(255, 133, 162, 0.5);
+            font-family: 'Press Start 2P', monospace;
+            transition: all 0.15s ease;
+        }
+
+        .cute-neon-btn:hover {
+            background: #ff85a2;
+            color: #ffffff;
+            box-shadow: 1px 1px 0px #2a1a40, 0 0 15px rgba(255, 105, 180, 0.8);
+            transform: translateY(-1px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fbebf2;
+            border-left: 1px solid #ff85a2;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff85a2;
+            border: 2px solid #ffffff;
+            border-radius: 4px;
+        }
+
+        #sparkle-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 998;
+        }
+
+        .glow-soft-pink {
+            text-shadow: 0 0 8px #ffb3c6, 0 0 12px #ff85a2;
+        }
+        .glow-soft-blue {
+            text-shadow: 0 0 8px #b9e1ff, 0 0 12px #70d6ff;
+        }
+
+        /* Spinning CD Animation */
+        @keyframes cdSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .spin-cd {
+            animation: cdSpin 4s linear infinite;
+        }
+        .spin-paused {
+            animation-play-state: paused;
+        }
+
+        @keyframes bounceCute {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        .bounce-cute {
+            animation: bounceCute 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative selection:bg-cute-pink-dark selection:text-white">
+
+    <div class="scanlines"></div>
+    <canvas id="sparkle-canvas"></canvas>
+
+    <header class="w-full bg-white border-b-2 border-cute-pink-dark z-10 shadow-sm">
+        <div class="flex items-center text-lg py-1 px-3 bg-gradient-to-r from-cute-pink to-cute-blue text-cute-dark font-tech">
+            <span class="bg-white text-cute-hotpink px-2 py-0.5 text-xs font-bold mr-3 rounded border border-cute-pink-dark font-pixel-title bounce-cute">
+                💖 CYBER_SWEET
+            </span>
+            <marquee behavior="scroll" direction="left" class="tracking-widest font-bold text-cute-dark">
+                ★ WELCOME TO MY CUTE CYBER HAVEN ★ ✨ 💖 👾 ♡ ENJOY THE PASTEL Y2K VIBES ♡ SYSTEM STATUS: SWEET & ONLINE ♡ ✨
+            </marquee>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-6 flex-grow flex flex-col md:flex-row gap-6 items-start z-10">
+
+        <!-- Sidebar Section -->
+        <aside class="w-full md:w-80 flex-shrink-0 flex flex-col gap-6">
+            
+            <!-- Window 1: Profile Badge -->
+            <div class="pixel-window w-full">
+                <div class="pixel-window-header px-2 py-1 flex justify-between items-center">
+                    <span>♡ MY_PROFILE.EXE ♡</span>
+                    <div class="flex gap-1">
+                        <button class="w-3 h-3 bg-white border border-cute-dark text-black text-[8px] flex items-center justify-center font-bold">_</button>
+                        <button class="w-3 h-3 bg-white border border-cute-dark text-black text-[8px] flex items-center justify-center font-bold">X</button>
+                    </div>
+                </div>
+                <div class="p-4 bg-cute-gray text-cute-dark flex flex-col items-center border-t-2 border-white">
+                    
+                    <!-- Cute Avatar Frame -->
+                    <div class="relative group mb-3">
+                        <img src="https://placehold.co/120x120/ffd1dc/2a1a40?text=SWEET_AVATAR" alt="Pixel Avatar" class="w-28 h-28 border-4 border-white rounded-lg shadow-[0_0_10px_#ff85a2] bg-cute-pink">
+                        <span class="absolute -bottom-1 -right-1 text-lg">🌸</span>
+                    </div>
+
+                    <h2 class="font-pixel-title text-cute-hotpink text-xs mb-1 glow-soft-pink">PRINCESS_2000</h2>
+                    <p class="font-tech text-xs text-purple-800 font-bold mb-3">&lt; Cute Creator / Pixel Designer &gt;</p>
+
+                    <!-- Cute Status Box -->
+                    <div class="w-full bg-white border-2 border-cute-pink p-2.5 rounded-md mb-3 text-xs font-tech shadow-inner">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-gray-500 font-bold">MOOD:</span>
+                            <span class="text-cute-hotpink font-bold bounce-cute">🍓 STRAWBERRY 🍓</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 font-bold">ZONE:</span>
+                            <span class="text-cute-blue-dark font-bold">PASTEL_WORLD</span>
+                        </div>
+                    </div>
+
+                    <button onclick="toggleStatus()" class="w-full py-2 text-xs cute-neon-btn rounded">
+                        ✨ CHANGE MOOD ✨
+                    </button>
+                </div>
+            </div>
+
+            <div class="pixel-window w-full">
+                <div class="pixel-window-header px-2 py-1 flex justify-between items-center">
+                    <span>♫ SWEET_AUDIO.PLAYER</span>
+                    <div class="flex gap-1">
+                        <button class="w-3 h-3 bg-white border border-cute-dark text-black text-[8px] flex items-center justify-center font-bold">X</button>
+                    </div>
+                </div>
+                <div class="p-3 bg-white border-t-2 border-cute-pink font-tech flex flex-col items-center">
+                    
+                    <!-- Spinning Pixel CD -->
+                    <div class="relative w-20 h-20 my-2 flex items-center justify-center">
+                        <div id="cd-disc" class="w-20 h-20 rounded-full border-4 border-cute-pink bg-gradient-to-tr from-cute-pink via-cute-lavender to-cute-blue flex items-center justify-center shadow-md spin-cd spin-paused">
+                            <div class="w-6 h-6 rounded-full bg-white border-2 border-cute-hotpink flex items-center justify-center">
+                                <div class="w-2 h-2 rounded-full bg-cute-hotpink"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-center font-bold text-cute-hotpink mb-1 w-full truncate" id="track-name">
+                        ♪ Track_01_Bubblegum_Pop.mp3
+                    </div>
+
+                    <!-- Pastel Audio Bar -->
+                    <div class="w-full h-4 bg-cute-gray border border-cute-pink rounded-full mb-3 flex items-center p-0.5" id="visualizer">
+                        <div class="bg-gradient-to-r from-cute-pink to-cute-blue h-full w-2/3 rounded-full animate-pulse"></div>
+                    </div>
+
+                    <!-- Player Controls -->
+                    <div class="flex gap-2 w-full">
+                        <button id="play-btn" onclick="togglePlay()" class="pixel-button flex-1 py-1.5 text-xs font-pixel-title rounded">
+                            ► PLAY
+                        </button>
+                        <button onclick="nextTrack()" class="pixel-button flex-1 py-1.5 text-xs font-pixel-title rounded">
+                            NEXT ⏭
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pixel-window w-full p-3 bg-gradient-to-r from-cute-pink via-cute-lavender to-cute-blue text-center">
+                <div class="text-xs text-cute-dark font-pixel-title mb-1 flex items-center justify-center gap-1">
+                    <span>🎀</span> <span>SYSTEM TIME</span> <span>🎀</span>
+                </div>
+                <div id="pixel-clock" class="text-2xl text-white font-pixel-title tracking-wider drop-shadow-[2px_2px_0px_#2a1a40]">
+                    00:00:00 AM
+                </div>
+            </div>
+
+        </aside>
+
+        <section class="flex-grow w-full">
+            <div class="pixel-window w-full">
+                
+                <!-- Window Title -->
+                <div class="pixel-window-header px-2 py-1.5 flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm">💖</span>
+                        <span>CUTE_DESKTOP_HOME.EXE</span>
+                    </div>
+                    <div class="flex gap-1">
+                        <button class="w-3 h-3 bg-white border border-cute-dark text-black text-[8px] flex items-center justify-center font-bold">_</button>
+                        <button class="w-3 h-3 bg-white border border-cute-dark text-black text-[8px] flex items-center justify-center font-bold">□</button>
+                        <button class="w-3 h-3 bg-white border border-cute-dark text-black text-[8px] flex items-center justify-center font-bold">X</button>
+                    </div>
+                </div>
+
+                <!-- Tabs Navigation Bar -->
+                <div class="bg-cute-gray p-1.5 border-b-2 border-cute-pink flex gap-2 overflow-x-auto text-xs font-pixel-title">
+                    <button onclick="switchTab('about')" id="tab-btn-about" class="pixel-button px-3 py-2 bg-white text-cute-hotpink font-bold rounded">
+                        [ 🌸 ABOUT ]
+                    </button>
+                    <button onclick="switchTab('projects')" id="tab-btn-projects" class="pixel-button px-3 py-2 text-gray-600 rounded">
+                        [ 🎨 WORKS ]
+                    </button>
+                    <button onclick="switchTab('guestbook')" id="tab-btn-guestbook" class="pixel-button px-3 py-2 text-gray-600 rounded">
+                        [ ✉ GUESTBOOK ]
+                    </button>
+                    <button onclick="switchTab('stickers')" id="tab-btn-stickers" class="pixel-button px-3 py-2 text-gray-600 rounded">
+                        [ ✨ STICKERS ]
+                    </button>
+                </div>
+
+                <div class="p-6 bg-white min-h-[440px] border-t-2 border-white text-cute-dark font-tech">
+                    
+                    <!-- TAB 1: ABOUT ME -->
+                    <div id="tab-about" class="tab-content flex flex-col gap-4">
+                        <div class="border-b-2 border-dashed border-cute-pink pb-3">
+                            <h1 class="text-2xl font-pixel-title text-cute-hotpink glow-soft-pink mb-1 flex items-center gap-2">
+                                WELCOME TO MY PASTEL WORLD! <span class="text-xl">✨</span>
+                            </h1>
+                            <p class="text-cute-blue-dark font-bold text-sm">>>> INITIALIZING SWEET Y2K PALETTE...</p>
+                        </div>
+                        
+                        <p class="text-lg leading-relaxed text-cute-dark font-medium">
+                            这是为您定制的 <span class="text-cute-hotpink font-bold">浅色系/可爱风 Y2K 网站基底</span>！融合了千禧年代复古 Windows 元素、马卡龙粉蓝配色以及像素小贴纸装饰。
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            <div class="border-2 border-cute-pink p-3.5 bg-cute-pink/20 rounded-lg shadow-sm">
+                                <h3 class="font-pixel-title text-xs text-cute-hotpink mb-2 flex items-center gap-1">
+                                    <span>💖</span> DESIGN FEATURES / 设计亮点
+                                </h3>
+                                <ul class="list-disc list-inside text-sm text-cute-dark space-y-1 font-bold">
+                                    <li>浅粉与冰蓝柔和网格底色 (Pastel Grid)</li>
+                                    <li>立体温润的像素按压式按钮</li>
+                                    <li>可爱的 CD 旋转音乐播放效果</li>
+                                    <li>浪漫的像素粉蓝爱心鼠标跟随粒子</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="border-2 border-cute-blue-dark p-3.5 bg-cute-blue/20 rounded-lg shadow-sm">
+                                <h3 class="font-pixel-title text-xs text-cute-blue-dark mb-2 flex items-center gap-1">
+                                    <span>🌟</span> CUSTOMIZATION / 后续扩展建议
+                                </h3>
+                                <ul class="list-disc list-inside text-sm text-cute-dark space-y-1 font-bold">
+                                    <li>替换为你喜爱的可爱头像与插画</li>
+                                    <li>添加个人作品、手绘或画廊展示</li>
+                                    <li>在 Stickers 栏目加入你的收藏贴纸</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Alert Test -->
+                        <div class="mt-4 p-4 bg-gradient-to-r from-cute-pink/30 to-cute-blue/30 border-2 border-cute-pink rounded-xl text-center">
+                            <span class="text-cute-hotpink font-pixel-title text-xs block mb-2">TRY CLICKING THE SWEET BUTTON!</span>
+                            <button onclick="triggerSweetAlert()" class="px-5 py-2.5 cute-neon-btn text-xs rounded-full">
+                                ✨ CLICK FOR A MAGICAL SURPRISE ✨
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: PROJECTS / WORKS -->
+                    <div id="tab-projects" class="tab-content hidden flex-col gap-4">
+                        <h2 class="text-xl font-pixel-title text-cute-hotpink mb-2 flex items-center gap-2">
+                            <span>🎀</span> MY_SWEET_CREATIONS
+                        </h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Work Card 1 -->
+                            <div class="border-2 border-cute-pink p-3 bg-cute-gray rounded-lg hover:shadow-md transition-all">
+                                <div class="bg-white h-28 mb-2 rounded border border-cute-pink flex items-center justify-center">
+                                    <span class="text-5xl bounce-cute">🍰</span>
+                                </div>
+                                <h3 class="font-pixel-title text-xs text-cute-hotpink mb-1">PROJECT 01: DESSERT MAKER</h3>
+                                <p class="text-xs text-gray-600 font-bold">A cute pixel-art baking game prototype made with JS.</p>
+                            </div>
+                            <!-- Work Card 2 -->
+                            <div class="border-2 border-cute-blue-dark p-3 bg-cute-gray rounded-lg hover:shadow-md transition-all">
+                                <div class="bg-white h-28 mb-2 rounded border border-cute-blue-dark flex items-center justify-center">
+                                    <span class="text-5xl bounce-cute">🦄</span>
+                                </div>
+                                <h3 class="font-pixel-title text-xs text-cute-blue-dark mb-1">PROJECT 02: UNICORN TOWN</h3>
+                                <p class="text-xs text-gray-600 font-bold">Interactive dreamland interactive canvas illustration.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: GUESTBOOK -->
+                    <div id="tab-guestbook" class="tab-content hidden flex-col gap-4">
+                        <h2 class="text-xl font-pixel-title text-cute-hotpink mb-2 flex items-center gap-2">
+                            <span>✉</span> SWEET_GUESTBOOK
+                        </h2>
+                        <div class="flex flex-col gap-3">
+                            <input type="text" id="guest-name" placeholder="YOUR CUTE NICKNAME..." class="bg-cute-gray border-2 border-cute-pink p-2.5 text-sm text-cute-dark rounded focus:outline-none focus:border-cute-hotpink">
+                            <textarea id="guest-msg" rows="3" placeholder="LEAVE A SWEET MESSAGE FOR ME..." class="bg-cute-gray border-2 border-cute-pink p-2.5 text-sm text-cute-dark rounded focus:outline-none focus:border-cute-hotpink"></textarea>
+                            <button onclick="postGuestbook()" class="cute-neon-btn py-2.5 text-xs rounded">SEND LOVE 💖</button>
+                        </div>
+
+                        <!-- Message List -->
+                        <div class="mt-4 border-t-2 border-dashed border-cute-pink pt-3 space-y-3" id="guestbook-list">
+                            <div class="bg-cute-pink/20 p-3 border-l-4 border-cute-hotpink rounded text-xs">
+                                <div class="text-cute-hotpink font-pixel-title text-[10px] mb-1">
+                                    @PixelAngel <span class="text-gray-400 font-normal">[2000-01-01]</span>
+                                </div>
+                                <div class="text-cute-dark font-bold">This pastel site is super adorable! Love the colors! 💕✨</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: STICKERS COLLECTION -->
+                    <div id="tab-stickers" class="tab-content hidden flex-col gap-4">
+                        <h2 class="text-xl font-pixel-title text-cute-hotpink mb-2 flex items-center gap-2">
+                            <span>✨</span> STICKER_COLLECTION
+                        </h2>
+                        <p class="text-sm text-gray-600 font-bold">Click on stickers to collect sweet love energy!</p>
+                        <div class="grid grid-cols-3 sm:grid-cols-4 gap-3 text-center">
+                            <div onclick="boostHeart(this)" class="p-3 bg-cute-pink/20 border-2 border-cute-pink rounded-lg cursor-pointer hover:scale-110 transition-transform">
+                                <div class="text-3xl mb-1">💖</div>
+                                <div class="font-pixel-title text-[8px] text-cute-hotpink">PIXEL HEART</div>
+                            </div>
+                            <div onclick="boostHeart(this)" class="p-3 bg-cute-blue/20 border-2 border-cute-blue-dark rounded-lg cursor-pointer hover:scale-110 transition-transform">
+                                <div class="text-3xl mb-1">⭐</div>
+                                <div class="font-pixel-title text-[8px] text-cute-blue-dark">STAR SHINE</div>
+                            </div>
+                            <div onclick="boostHeart(this)" class="p-3 bg-cute-lavender/30 border-2 border-purple-300 rounded-lg cursor-pointer hover:scale-110 transition-transform">
+                                <div class="text-3xl mb-1">🎀</div>
+                                <div class="font-pixel-title text-[8px] text-purple-500">PASTEL BOW</div>
+                            </div>
+                            <div onclick="boostHeart(this)" class="p-3 bg-cute-yellow/30 border-2 border-yellow-300 rounded-lg cursor-pointer hover:scale-110 transition-transform">
+                                <div class="text-3xl mb-1">🐥</div>
+                                <div class="font-pixel-title text-[8px] text-yellow-600">CUTIE BIRD</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="w-full bg-white border-t-2 border-cute-pink-dark p-2 text-center text-xs font-tech z-10 shadow-inner">
+        <p class="text-cute-dark font-bold">
+            SYSTEM VERSION 2.0.0 PASTEL &copy; 2000-2026 SWEET_CYBER_LABS. MADE WITH ♡
+        </p>
+    </footer>
+
+    <script>
+        // Digital Clock
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { hour12: true });
+            document.getElementById('pixel-clock').innerText = timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Tabs Handler
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('flex');
+            });
+
+            const selectedTab = document.getElementById('tab-' + tabId);
+            selectedTab.classList.remove('hidden');
+            selectedTab.classList.add('flex');
+
+            const tabs = ['about', 'projects', 'guestbook', 'stickers'];
+            tabs.forEach(t => {
+                const btn = document.getElementById('tab-btn-' + t);
+                if (t === tabId) {
+                    btn.classList.add('bg-white', 'text-cute-hotpink');
+                    btn.classList.remove('text-gray-600');
+                } else {
+                    btn.classList.remove('bg-white', 'text-cute-hotpink');
+                    btn.classList.add('text-gray-600');
+                }
+            });
+        }
+
+        // Music Player Controls
+        let isPlaying = false;
+        const playlist = ["♪ Track_01_Bubblegum_Pop.mp3", "♪ Track_02_Kawaii_LoFi.wav", "♪ Track_03_Starry_Synth.mid"];
+        let currentTrack = 0;
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            const playBtn = document.getElementById('play-btn');
+            const cdDisc = document.getElementById('cd-disc');
+            
+            if (isPlaying) {
+                playBtn.innerText = "❚❚ PAUSE";
+                cdDisc.classList.remove('spin-paused');
+            } else {
+                playBtn.innerText = "► PLAY";
+                cdDisc.classList.add('spin-paused');
+            }
+        }
+
+        function nextTrack() {
+            currentTrack = (currentTrack + 1) % playlist.length;
+            document.getElementById('track-name').innerText = playlist[currentTrack];
+        }
+
+        // Guestbook logic
+        function postGuestbook() {
+            const nameInput = document.getElementById('guest-name');
+            const msgInput = document.getElementById('guest-msg');
+
+            if (!nameInput.value || !msgInput.value) {
+                alert("Please leave both your nickname and a sweet message! 💖");
+                return;
+            }
+
+            const list = document.getElementById('guestbook-list');
+            const newEntry = document.createElement('div');
+            newEntry.className = "bg-cute-pink/20 p-3 border-l-4 border-cute-hotpink rounded text-xs";
+            newEntry.innerHTML = `
+                <div class="text-cute-hotpink font-pixel-title text-[10px] mb-1">
+                    @${nameInput.value} <span class="text-gray-400 font-normal">[JUST NOW]</span>
+                </div>
+                <div class="text-cute-dark font-bold">${msgInput.value}</div>
+            `;
+            list.prepend(newEntry);
+
+            nameInput.value = '';
+            msgInput.value = '';
+        }
+
+        // Mood Switcher
+        const moods = ["🍓 STRAWBERRY", "🌸 CHERRY BLOSSOM", "🍬 COTTON CANDY", "🎀 SWEET DREAMS"];
+        let moodIdx = 0;
+        function toggleStatus() {
+            moodIdx = (moodIdx + 1) % moods.length;
+            const moodEl = document.querySelector('aside .text-cute-hotpink');
+            if (moodEl) moodEl.innerText = moods[moodIdx];
+        }
+
+        function triggerSweetAlert() {
+            alert("💖 Sending you extra love and sweetness today! ✨");
+        }
+
+        function boostHeart(el) {
+            el.classList.add('scale-125');
+            setTimeout(() => el.classList.remove('scale-125'), 200);
+        }
+
+        // Interactive Pixel Sparkle & Heart Particle Cursor Effect
+        const canvas = document.getElementById('sparkle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            for (let i = 0; i < 2; i++) {
+                particles.push({
+                    x: e.clientX + (Math.random() * 12 - 6),
+                    y: e.clientY + (Math.random() * 12 - 6),
+                    size: Math.floor(Math.random() * 5) + 3,
+                    color: ['#ff85a2', '#70d6ff', '#e0c3fc', '#fff176'][Math.floor(Math.random() * 4)],
+                    life: 25,
+                    isHeart: Math.random() > 0.6
+                });
+            }
+        });
+
+        function animateSparkles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                ctx.fillStyle = p.color;
+                
+                if (p.isHeart) {
+                    // Draw mini pixel cross / heart star
+                    ctx.fillRect(p.x, p.y, p.size, p.size);
+                    ctx.fillRect(p.x - p.size, p.y, p.size * 3, p.size / 2);
+                } else {
+                    ctx.fillRect(p.x, p.y, p.size, p.size);
+                }
+
+                p.life--;
+                p.y += 0.4;
+            }
+            particles = particles.filter(p => p.life > 0);
+            requestAnimationFrame(animateSparkles);
+        }
+        animateSparkles();
+    </script>
+</body>
+</html>
